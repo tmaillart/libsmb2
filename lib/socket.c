@@ -102,6 +102,19 @@ static int
 smb2_connect_async_next_addr(struct smb2_context *smb2, const struct addrinfo *base);
 
 void
+smb2_connect_timeout(struct smb2_context *smb2, int err, const char *desc)
+{
+        smb2_set_error(smb2, desc);
+        smb2->connect_cb(smb2, err, NULL, smb2->connect_data);
+}
+
+int
+smb2_get_timeout(struct smb2_context *smb2)
+{
+        return smb2->timeout;
+}
+
+void
 smb2_close_connecting_fds(struct smb2_context *smb2)
 {
         size_t i;

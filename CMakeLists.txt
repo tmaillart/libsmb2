@@ -18,12 +18,7 @@ option(ENABLE_EXAMPLES "Build example programs" OFF)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
-find_package(GSSAPI)
 find_package(OpenSSL)
-
-if(GSSAPI_FOUND)
-  add_definitions(-DHAVE_LIBKRB5)
-endif()
 
 if(OPENSSL_FOUND)
   add_definitions(-DHAVE_OPENSSL_LIBS)
@@ -35,8 +30,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}
                     include
                     include/smb2
                     ${OPENSSL_INCLUDE_DIR})
-
-set(core_DEPENDS ${GSSAPI_LIBRARIES} CACHE STRING "" FORCE)
 
 if(MSVC AND BUILD_SHARED_LIBS)
   # If we are building dll with msvc, then generate a def file according to the syms file

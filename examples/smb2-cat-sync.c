@@ -23,6 +23,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "smb2.h"
 #include "libsmb2.h"
@@ -30,7 +31,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #define MAXBUF 16 * 1024 * 1024
 uint8_t buf[MAXBUF];
-uint32_t pos;
+static uint32_t pos;
 
 int usage(void)
 {
@@ -78,7 +79,8 @@ int main(int argc, char *argv[])
 		exit(10);
         }
 
-        while ((count = smb2_pread(smb2, fh, buf, MAXBUF, pos)) != 0) {
+        time_t start = time(NULL);
+        while ((count = smb2_read(smb2, fh, buf, MAXBUF)) != 0) {
                 if (count == -EAGAIN) {
                         continue;
                 }
@@ -91,6 +93,7 @@ int main(int argc, char *argv[])
                 write(STDOUT_FILENO, buf, count);
                 pos += count;
         };
+        fprintf(stderr, "avg bw: %f MB/s\n", (float) pos / (time(NULL) - start) * 1e-6);
                 
         smb2_close(smb2, fh);
         smb2_disconnect_share(smb2);

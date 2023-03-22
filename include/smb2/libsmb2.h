@@ -38,6 +38,8 @@ struct smb2_context;
 typedef void (*smb2_command_cb)(struct smb2_context *smb2, int status,
                                 void *command_data, void *cb_data);
 
+int smb2_get_timeout(struct smb2_context *smb2);
+
 /* Stat structure */
 #define SMB2_TYPE_FILE      0x00000000
 #define SMB2_TYPE_DIRECTORY 0x00000001

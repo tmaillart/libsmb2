@@ -101,6 +101,12 @@
 static int
 smb2_connect_async_next_addr(struct smb2_context *smb2, const struct addrinfo *base);
 
+int
+smb2_get_timeout(struct smb2_context *smb2)
+{
+        return smb2->timeout;
+}
+
 void
 smb2_close_connecting_fds(struct smb2_context *smb2)
 {
